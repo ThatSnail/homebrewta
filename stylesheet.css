@@ -1,0 +1,59 @@
+.message
+{
+	font-family: "Courier New";
+	font-size: 36pt;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.key
+{
+	font-family: "Courier New";
+	font-size: 24pt;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	line-height: 50%;
+}
+
+.user
+{
+	font-family: "Courier New";
+	font-size: 12pt;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 100px;
+}
+
+.wat
+{
+	font-family: "Courier New";
+	font-size: 10pt;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	font-style: italic;
+}
+
+.header
+{
+	font-family: "Courier New";
+	font-size: 36pt;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 100px;
+}
+
+.bodytext
+{
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	font-size: 12pt;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 100px;
+	font-style: italic;
+}
