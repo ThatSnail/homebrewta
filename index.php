@@ -94,6 +94,10 @@ class Grid
 	}
 	function set($x, $y, $value)
 	{
+		if(!isset($this->grid[$x]))
+		{
+			$this->grid[$x] = Array();
+		}
 		$this->grid[$x][$y] = $value;
 		
 		// Remove self from neighbors
@@ -120,6 +124,8 @@ class Grid
 		{
 			array_push($this->neighbors, array($x, $y + 1));
 		}
+		
+		$this->neighbors = array_values($this->neighbors);
 	}
 	function get($x, $y)
 	{
