@@ -60,7 +60,7 @@ class Grid
 	function setRandomNeighbor($value)
 	{
 		// Find a random neighbor and set it there
-		$n = $this->neighbors[Random::num(0, count($this->neighbors) - 1)];
+		$n = $this->neighbors[Random::num(0, 100000000) % count($this->neighbors)];
 		$this->set($n[0], $n[1], $value);
 		return array($n[0], $n[1]);
 	}

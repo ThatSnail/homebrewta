@@ -33,7 +33,7 @@ document.onkeydown = move;
 Make Your Own Text Adventure!
 </title>
 <body>
-<p class="bodytext">!!! Under construction, expect magic things to happen !!!</p>
+<!--<p class="bodytext">!!! Under construction, expect magic things to happen !!!</p>-->
 <?php
 $get_tweet = filter_var($_GET['tweet'], FILTER_SANITIZE_STRING);
 
@@ -56,12 +56,11 @@ require_once("./parse.php");
 if($get_tweet != ""){$current_tweet = $get_tweet;}else{$current_tweet = 0;}
 $tweets = $_SESSION['data'];
 Random::seed(105);
-
 $current_x = 0;
 $current_y = 0;
-
 $grid = new Grid();
-for ($i = 0; $i < count($tweets); $i++)
+
+for($i = 0; $i < count($tweets); $i++)
 {
 	// If first, place at (0, 0)
 	if($i == 0)
