@@ -56,12 +56,20 @@ require_once("./parse.php");
 if($get_tweet != ""){$current_tweet = $get_tweet;}else{$current_tweet = 0;}
 $tweets = $_SESSION['data'];
 Random::seed(105);
+
 $current_x = 0;
 $current_y = 0;
-$grid = new Grid();
 
+// Map generation
+$grid = new Grid();
 for($i = 0; $i < count($tweets); $i++)
 {
+	// Parse message for special positioning instructions
+	$tweet = $tweets[$i];
+	$message = Tweet::getMessage($tweet);
+	$user = Tweet::getUser($tweet);
+	$message = Parse::removeHomebrew($user, $message);
+
 	// If first, place at (0, 0)
 	if($i == 0)
 	{
