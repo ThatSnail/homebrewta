@@ -33,6 +33,7 @@ document.onkeydown = move;
 Make Your Own Text Adventure!
 </title>
 <body>
+<p class="bodytext">!!! Under construction, expect magic things to happen !!!</p>
 <?php
 $get_tweet = filter_var($_GET['tweet'], FILTER_SANITIZE_STRING);
 
@@ -47,98 +48,14 @@ if(!isset($_SESSION['data']))
 	$_SESSION['data'] = array_reverse(json_decode($data, true));
 }
 
-class Random
-{
-	private static $RSeed = 0;
-	
-	public static function seed($s = 0) {
-		self::$RSeed = abs(intval($s)) % 9999999 + 1;
-		self::num();
-	}
-	
-	public static function num($min = 0, $max = 9999999) {
-		if (self::$RSeed == 0) self::seed(mt_rand());
-		self::$RSeed = (self::$RSeed * 125) % 2796203;
-		return self::$RSeed % ($max - $min + 1) + $min;
-	}
-}
+require_once("./random.php");
+require_once("./grid.php");
+require_once("./tweet.php");
+require_once("./parse.php");
 
-if($get_tweet != "")
-{
-	$current_tweet = $get_tweet;
-}
-else
-{
-	$current_tweet = 0;
-}
-
+if($get_tweet != ""){$current_tweet = $get_tweet;}else{$current_tweet = 0;}
 $tweets = $_SESSION['data'];
-
 Random::seed(105);
-
-class Grid
-{
-	private $grid = Array();
-	private $neighbors = Array();
-	
-	function has($x, $y)
-	{
-		if(isset($this->grid[$x]))
-		{
-			if(isset($this->grid[$x][$y]))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	function set($x, $y, $value)
-	{
-		if(!isset($this->grid[$x]))
-		{
-			$this->grid[$x] = Array();
-		}
-		$this->grid[$x][$y] = $value;
-		
-		// Remove self from neighbors
-		$pos = array_search(array($x, $y), $this->neighbors);
-		if(pos !== false)
-		{
-			unset($this->neighbors[$pos]);
-		}
-		
-		// Add neighbors
-		if(!$this->has($x - 1, $y) && !in_array(array($x - 1, $y), $this->neighbors))
-		{
-			array_push($this->neighbors, array($x - 1, $y));
-		}
-		if(!$this->has($x + 1, $y) && !in_array(array($x + 1, $y), $this->neighbors))
-		{
-			array_push($this->neighbors, array($x + 1, $y));
-		}
-		if(!$this->has($x, $y - 1) && !in_array(array($x, $y - 1), $this->neighbors))
-		{
-			array_push($this->neighbors, array($x, $y - 1));
-		}
-		if(!$this->has($x, $y + 1) && !in_array(array($x, $y + 1), $this->neighbors))
-		{
-			array_push($this->neighbors, array($x, $y + 1));
-		}
-		
-		$this->neighbors = array_values($this->neighbors);
-	}
-	function get($x, $y)
-	{
-		return $this->grid[$x][$y];
-	}
-	function setRandomNeighbor($value)
-	{
-		// Find a random neighbor and set it there
-		$n = $this->neighbors[Random::num(0, count($this->neighbors) - 1)];
-		$this->set($n[0], $n[1], $value);
-		return array($n[0], $n[1]);
-	}
-}
 
 $current_x = 0;
 $current_y = 0;
@@ -167,13 +84,10 @@ for ($i = 0; $i < count($tweets); $i++)
 	}
 }
 
-$current_message = $tweets[$current_tweet]['text'];
-$current_user = $tweets[$current_tweet]['user']['screen_name'];
-if($current_user != "HomebrewTA" or strpos($current_message, "@HomebrewTA") == 0)
-{
-	$current_message = str_replace("@HomebrewTA", "", $current_message);
-}
-$current_message = str_replace("@HomebrewTA", "<a href='http://twitter.com/HomebrewTA'>@HomebrewTA</a>", $current_message);
+$tweet = $tweets[$current_tweet];
+$current_message = Tweet::getMessage($tweet);
+$current_user = Tweet::getUser($tweet);
+$current_message = Parse::removeHomebrew($current_user, $current_message);
 
 // Print
 {
