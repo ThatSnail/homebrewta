@@ -33,15 +33,24 @@ document.onkeydown = move;
 Make Your Own Text Adventure!
 </title>
 <body>
-<p class="bodytext">!!! Under construction, expect to see magic things happen !!!</p>
+<!--<p class="bodytext">!!! Under construction, expect magic things to happen !!!</p>-->
 <?php
 $get_tweet = filter_var($_GET['tweet'], FILTER_SANITIZE_STRING);
 
-if($get_tweet == 0){unset($_SESSION['data']);}
-if(!isset($_SESSION['data'])){$data = file_get_contents("data.json");$_SESSION['data'] = array_reverse(json_decode($data, true));}
+if($get_tweet == 0)
+{
+	unset($_SESSION['data']);
+}
+
+if(!isset($_SESSION['data']))
+{
+	$data = file_get_contents("data.json");
+	$_SESSION['data'] = array_reverse(json_decode($data, true));
+}
 
 require_once("./random.php");
 require_once("./grid.php");
+require_once("./tweet.php");
 require_once("./parse.php");
 
 if($get_tweet != ""){$current_tweet = $get_tweet;}else{$current_tweet = 0;}
@@ -53,7 +62,7 @@ $current_y = 0;
 
 // Map generation
 $grid = new Grid();
-for ($i = 0; $i < count($tweets); $i++)
+for($i = 0; $i < count($tweets); $i++)
 {
 	// Parse message for special positioning instructions
 	$tweet = $tweets[$i];
@@ -82,8 +91,9 @@ for ($i = 0; $i < count($tweets); $i++)
 	}
 }
 
-$current_message = $tweets[$current_tweet]['text'];
-$current_user = $tweets[$current_tweet]['user']['screen_name'];
+$tweet = $tweets[$current_tweet];
+$current_message = Tweet::getMessage($tweet);
+$current_user = Tweet::getUser($tweet);
 $current_message = Parse::removeHomebrew($current_user, $current_message);
 
 // Print
